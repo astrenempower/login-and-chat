@@ -1,4 +1,4 @@
-
+import Sidebar from './Components/Sidebar'
 
 function App() {
   return (
@@ -6,6 +6,9 @@ function App() {
       
       {/* body */}
       <div className='app-body flex bg-[#ededed] h-[90vh] w-[90vw] shadow-2xl mt-[-50px]'>
+        {/* sidebar */}
+        <Sidebar />
+        {/* chat */}
 
       </div>
     </div>
