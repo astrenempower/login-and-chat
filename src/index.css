@@ -20,3 +20,9 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.search-container > .MuiSvgIcon-root {
+  color: gray;
+  padding: 2px;
+  margin-left: 10px;
+}
