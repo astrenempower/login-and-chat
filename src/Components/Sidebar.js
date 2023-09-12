@@ -1,10 +1,11 @@
 import React from 'react'
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import Avatar from '@mui/material/Avatar'
 import DonutLargeIcon from '@mui/icons-material/DonutLarge';
 import ChatIcon from '@mui/icons-material/Chat';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { IconButton } from '@mui/material';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
+import Sidebarchat from './Sidebarchat';
 
 function Sidebar() {
   return (
@@ -12,7 +13,7 @@ function Sidebar() {
         {/* side bar header */}
         <div className='sidebar-header flex justify-between p-[20px] border-r-2 border-r-slate-200'>
             <IconButton>
-                <AccountCircleIcon/>
+                <Avatar/>
             </IconButton>
             <div className='sidebarheader-right flex items-center justify-between min-w-[10vw]'>
                 <IconButton>
@@ -32,11 +33,12 @@ function Sidebar() {
                 <SearchOutlinedIcon/>
                 <input className='border-none ml-[10px] text-xs ' placeholder='Search or start new chat' type="text" />
             </div>
-
         </div>
         {/* side bar chat */}
-        <div className='sidebar-chat'>
-
+        <div className='sidebar-chat bg-white flex-1 overflow-scroll '>
+            <Sidebarchat/>
+            <Sidebarchat/>
+            <Sidebarchat/>
         </div>
     </div>
   )
