@@ -1,3 +1,4 @@
+import Chat from './Components/Chat';
 import Sidebar from './Components/Sidebar'
 
 function App() {
@@ -9,6 +10,7 @@ function App() {
         {/* sidebar */}
         <Sidebar />
         {/* chat */}
+        <Chat/>
 
       </div>
     </div>
