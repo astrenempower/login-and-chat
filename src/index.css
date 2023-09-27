@@ -30,3 +30,13 @@ code {
 .sidebar-chat  > .MuiSvgIcon-root {
   color: gray;
 }
+
+.chat-receiver {
+  margin-left: auto;
+  background-color: #dcf8c6;
+}
+
+.chat-footer > .MuiSvgIcon-root {
+  color: gray;
+  padding: 2px;
+}
