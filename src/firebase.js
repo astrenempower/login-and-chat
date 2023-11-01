@@ -21,10 +21,13 @@ export const app = initializeApp(firebaseConfig);
 export const analytics = getAnalytics(app);
 
 // Initialize Cloud Firestore and get a reference to the service
-export const db = getFirestore(app);
+const db = getFirestore(app);
 
 // Initialize Firebase Authentication and get a reference to the service
 export const auth = getAuth(app);
 
 // instance of googleauth provider
 export const provider = new GoogleAuthProvider();
+
+
+export {db}
