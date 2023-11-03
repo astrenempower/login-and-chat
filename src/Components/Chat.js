@@ -6,11 +6,14 @@ import { IconButton } from "@mui/material";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
 import MicIcon from '@mui/icons-material/Mic';
+import { useParams } from "react-router-dom";
 
 function Chat() {
   const [image, setImage] = useState("");
   // submit button
   const [input, setInput] = useState("")
+  // get room id
+  const {roomId} = useParams()
 
   useEffect(() => {
     // set image using random number

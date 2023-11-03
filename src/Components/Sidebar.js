@@ -14,6 +14,7 @@ function Sidebar() {
   const [rooms, setRooms] = useState([])
 
   useEffect(() => {
+    // add unsubscribe 2.14.44
     const fetchRooms = async () => {
       try {
         const roomCollection = collection(db, 'rooms');
