@@ -7,6 +7,8 @@ import AttachFileIcon from "@mui/icons-material/AttachFile";
 import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
 import MicIcon from '@mui/icons-material/Mic';
 import { useParams } from "react-router-dom";
+import { db } from "../firebase";
+import { doc, getDoc } from "firebase/firestore";
 
 function Chat() {
   const [image, setImage] = useState("");
@@ -14,11 +16,37 @@ function Chat() {
   const [input, setInput] = useState("")
   // get room id
   const {roomId} = useParams()
+  // keep track of room name
+  const [roomName, setRoomName] = useState("")
+
+  useEffect(()=> {
+    // get new messages every time room name changes
+
+   if(roomId){
+     const roomDocRef = doc(db, 'rooms', roomId)
+     const fetchRoomData = async () => {
+      try {
+        const roomSnapshot = await getDoc(roomDocRef);
+        if (roomSnapshot.exists()) {
+          setRoomName(roomSnapshot.data().name);
+        } else {
+          console.error("Room does not exist.");
+        }
+      } catch (error) {
+        console.error("Error fetching room:", error);
+      }
+    };
+
+    fetchRoomData();
+  }
+}, [roomId]);
+
+
 
   useEffect(() => {
     // set image using random number
     setImage(Math.floor(Math.random() * 5000));
-  }, []);
+  }, [roomId]);
 
 
   const sendMessage = (e) => {
@@ -38,7 +66,7 @@ function Chat() {
           alt="avatar"
         />
         <div className="chatheader-info flex-1 pl-5">
-          <h3 className="mb-[3px] font-medium text-white">Room name</h3>
+          <h3 className="mb-[3px] font-medium text-white">{roomName}</h3>
           <p className="mb-[3px] font-light text-slate-400 text-xs">
             {" "}
             Last seen at ...
