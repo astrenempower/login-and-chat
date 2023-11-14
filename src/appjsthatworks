@@ -1,0 +1,73 @@
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Chat from "./Components/Chat";
+// import Login from "./Components/Login";
+import Sidebar from "./Components/Sidebar";
+import React, { useEffect, useState } from "react";
+import astrenLogo from "./assets/AstrenLogo 1.png";
+import { auth, provider } from "./firebase";
+import {signInWithPopup} from "firebase/auth"
+
+
+function App() {
+
+  const [user, setUser] = useState('')
+
+  const handleSignIn = () => {
+    signInWithPopup(auth, provider).then((data)=> {
+      setUser(data.user.email)
+      localStorage.setItem("email", data.user.email)
+    }) 
+  };
+
+  useEffect(()=>{
+    setUser(localStorage.getItem("email"))
+  },[])
+
+  return (
+    <>
+         
+      {!user ? 
+      
+      (
+        <div className="App bg-black h-[100vh] grid place-items-center">
+          <div className="app-body flex  bg-[#130028] h-[90vh] w-[90vw] shadow-2xl mt-[-50px]">
+        
+            <div className="login bg-[#14012a] h-[100vh] w-[100vw] grid place-items-center">
+      
+              <div className="login-container p-[100px] text-center bg-[#220246] rounded-xl shadow-md">
+                <img className="object-contain mb-10" src={astrenLogo} alt="" />
+                <div className="login-text">
+                  <h1 className="text-white">Sign in to Astren Empower</h1>
+                </div>
+                <button
+                  className="bg-gradient-to-r from-[#5A33C4] via-[#B649A3] to-[#FF0040] text-white mt-12 p-3 uppercase rounded-md font-medium"
+                  onClick={handleSignIn}
+                >
+                  Sign In With Google
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )
+      : 
+      (
+        <div className="App bg-black h-[100vh] grid place-items-center">
+          <div className="app-body flex  bg-[#130028] h-[90vh] w-[90vw] shadow-2xl mt-[-50px]">
+            <Router>
+              <Sidebar />
+              <Routes>
+                <Route path="/rooms/:roomId" element={<Chat />} />
+              </Routes>
+            </Router>
+          </div>
+        </div>
+        
+      )
+      }
+    {/* </div> */}
+    </>
+  );
+}
+
+export default App;
