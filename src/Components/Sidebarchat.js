@@ -1,11 +1,35 @@
 import React, { useEffect, useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import { db } from "../firebase";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, doc, getDocs, orderBy, query } from "firebase/firestore";
 import { Link } from "react-router-dom";
 
 function Sidebarchat({ id, name, addNewChat }) {
   const [image, setImage] = useState("");
+  const [messages, setMessages] = useState("")
+
+  useEffect(()=> {
+    if(id){
+      const roomDocRef = doc(db, "rooms", id)
+      const messageDocRef = collection(roomDocRef, "messages")
+      const q = query(messageDocRef, orderBy("timestamp", "desc"));
+
+      const fetchMessageData = async () => {
+        try {
+          const querySnap = await getDocs(q);
+          if (!querySnap.empty){
+            setMessages(querySnap.docs.map((doc)=> doc.data()))
+          } else {
+            console.error("Message  does not exist.");
+          }
+        } catch (error) {
+          console.error("Error fetching room:", error);
+        }
+      }
+      fetchMessageData(); 
+
+    }
+  })
 
   useEffect(() => {
     // set image using random number
@@ -32,7 +56,7 @@ function Sidebarchat({ id, name, addNewChat }) {
         />
         <div className="sidebarchat-info ml-4 text-[#FFFFFF]">
           <h2 className="mb-[8px] text-sm font-semibold">{name}</h2>
-          <p className="font-extralight text-xs">Last message...</p>
+          <p className="font-extralight text-xs">{messages[0]?.message}</p>
         </div>
       </div>
     </Link>
