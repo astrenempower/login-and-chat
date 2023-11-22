@@ -8,8 +8,18 @@ import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import Sidebarchat from "./Sidebarchat";
 import { db } from "../firebase";
 import {doc, collection, getDocs} from 'firebase/firestore'
+import { getAuth } from "firebase/auth";
 
 function Sidebar() {
+
+  // get photourl from email
+  const auth = getAuth()
+  const user = auth.currentUser
+  if(user !== null) {
+    const displayName = user.displayName
+    const photoURL = user.photoURL
+    const uid = user.uid
+  }
 
   const [rooms, setRooms] = useState([])
 
@@ -37,7 +47,7 @@ function Sidebar() {
       {/* side bar header */}
       <div className="sidebar-header flex justify-between p-[15px] border-r-[1px] border-r-black bg-[#1D003A]">
         <IconButton>
-          <Avatar />
+          <Avatar src={user.photoURL} />
         </IconButton>
         <div className="sidebarheader-right flex items-center justify-between min-w-[10vw]">
           <IconButton>
