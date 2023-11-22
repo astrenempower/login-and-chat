@@ -50,7 +50,7 @@ function Sidebarchat({ id, name, addNewChat }) {
 
   return !addNewChat ? (
     <Link to={`/rooms/${id}`}>
-      <div className="sidebar-chat flex p-5 cursor-pointer border-b border-solid border-black border-2 hover:bg-[#1D003A]">
+      <div className="sidebar-chat flex p-5 cursor-pointer border-b border-solid border-black border-2 hover:bg-[#1D003A] overflow-y-auto">
         <Avatar
           src={`https://api.dicebear.com/7.x/adventurer/svg?seed=${image}`}
           alt="avatar"

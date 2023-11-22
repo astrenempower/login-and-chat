@@ -143,7 +143,7 @@ function Chat() {
         </div>
 
         {/* body */}
-        <div className="chat-body bg-cover bg-[#14012a] height: 400px flex-1 bg-repeat bg-center p-[30px]">
+        <div className="chat-body bg-cover bg-[#14012a] height: 400px flex-1 bg-repeat bg-center p-[30px] overflow-y-auto">
           {/* chat message */}
           {messages.map((message) => (
             <p
