@@ -8,8 +8,21 @@ import InsertEmoticonIcon from "@mui/icons-material/InsertEmoticon";
 import MicIcon from "@mui/icons-material/Mic";
 import { useParams } from "react-router-dom";
 import { db } from "../firebase";
-import { collection, doc, getDoc, getDocs, orderBy, query } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  onSnapshot,
+  orderBy,
+  query,
+} from "firebase/firestore";
 import Sidebar from "./Sidebar";
+import { getAuth } from "firebase/auth";
+// // timestamp
+// import firebase from "firebase";
+import { serverTimestamp } from "firebase/firestore";
 
 function Chat() {
   const [image, setImage] = useState("");
@@ -21,10 +34,17 @@ function Chat() {
   const [roomName, setRoomName] = useState("");
   // keep track of messages
   const [messages, setMessages] = useState([]);
+  // get user from email
+  const auth = getAuth();
+  const user = auth.currentUser;
+  // if(user !== null) {
+  //   const displayName = user.displayName
+  //   const photoURL = user.photoURL
+  //   const uid = user.uid
+  // }
 
+  // get new messages every time room name changes
   useEffect(() => {
-    // get new messages every time room name changes
-
     if (roomId) {
       // get room
       const roomDocRef = doc(db, "rooms", roomId);
@@ -41,35 +61,48 @@ function Chat() {
         }
       };
 
-      // get messages
-      const messageDocRef = collection(roomDocRef, 'messages')
-      const q = query(messageDocRef, orderBy("timestamp", "asc"))
-      const fetchMessageData = async () => {
-        try {
-          const messageSnapshot = await getDocs(q);
-          if (!messageSnapshot.empty){
-            setMessages(messageSnapshot.docs.map((doc)=> doc.data()))
-          } else {
-            console.error("Message  does not exist.");
-          }
-        } catch (error) {
-          console.error("Error fetching room:", error);
-        }
-      }
-
       fetchRoomData();
-      fetchMessageData(); 
     }
   }, [roomId]);
 
+  // get messages
   useEffect(() => {
-    // set image using random number
+    const roomDocRef = doc(db, "rooms", roomId);
+    const messageDocRef = collection(roomDocRef, "messages");
+    const q = query(messageDocRef, orderBy("timestamp", "asc"));
+
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const messagesData = [];
+      querySnapshot.forEach((doc) => {
+        messagesData.push(doc.data());
+      });
+      setMessages(messagesData);
+    });
+    // Cleanup function to unsubscribe when the component unmounts
+    return () => unsubscribe();
+  }, [roomId]);
+
+  // set image using random number
+  useEffect(() => {
     setImage(Math.floor(Math.random() * 5000));
   }, [roomId]);
 
-  const sendMessage = (e) => {
+  // send message
+  const sendMessage = async (e) => {
     e.preventDefault();
     // console.log("You typed >>>", input)
+
+    const messageDocRef = collection(db, "rooms", roomId, "messages");
+    console.log("userdisplayname: ", input);
+    try {
+      await addDoc(messageDocRef, {
+        message: input,
+        name: user.displayName,
+        timestamp: serverTimestamp(),
+      });
+    } catch (error) {
+      console.error("Error sending message:", error);
+    }
 
     // clean input after message
     setInput("");
@@ -111,9 +144,8 @@ function Chat() {
           {/* chat message */}
           {messages.map((message) => (
             <p
-              className={`chat-message ${
-                true && "chat-receiver"
-              } relative text-xs p-[10px] bg-[#6B4EFF] rounded-xl w-fit mb-[30px] text-white`}
+              className={`chat-message relative text-xs p-[10px] bg-[#7a7a7c] rounded-xl w-fit mb-[30px] text-white 
+              ${message.name === user.displayName && "chat-receiver"}`}
             >
               <span className="chat-name absolute top-[-14px] font-extrabold text-[10px]">
                 {" "}
@@ -135,7 +167,7 @@ function Chat() {
             <input
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              className="flex-1 rounded-[30px] p-[10px] border-black bg-[#302642]"
+              className="flex-1 rounded-[30px] p-[10px] border-black bg-[#302642] text-white"
               placeholder="Type a message"
               type="text"
             />
