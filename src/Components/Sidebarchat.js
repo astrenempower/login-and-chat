@@ -30,6 +30,7 @@ function Sidebarchat({ id, name, addNewChat }) {
 
     }
   })
+  // }, [id])
 
   useEffect(() => {
     // set image using random number
