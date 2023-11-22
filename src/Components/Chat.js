@@ -121,8 +121,11 @@ function Chat() {
           <div className="chatheader-info flex-1 pl-5">
             <h3 className="mb-[3px] font-medium text-white">{roomName}</h3>
             <p className="mb-[3px] font-light text-slate-400 text-xs">
-              {" "}
-              Last seen at ...
+             last seen {" "}
+              {messages.length > 0 ? 
+              new Date(messages[messages.length - 1]?.timestamp?.toDate()).toUTCString()
+            :
+            "not available"}
             </p>
           </div>
 
