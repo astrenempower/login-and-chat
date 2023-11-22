@@ -41,7 +41,7 @@ function Sidebarchat({ id, name, addNewChat }) {
       onClick={createChat}
       className="sidebar-chat flex p-5 cursor-pointer border-b border-solid border-black text-[#FFFFFF]hover:bg-[#1D003A]"
     >
-      <h2 className="mb-[8px] text-xl font-bold">Add New Chat</h2>
+      <h2 className="mb-[8px] text-xl font-bold text-white">Add New Chat</h2>
     </div>
   );
 }
